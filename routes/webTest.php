@@ -11,6 +11,8 @@
 |
 */
 
+echo 'asdasd';
+
 Route::get('/', [
     'uses' => 'ProductController@getIndex',
     'as' => 'product.index'

@@ -1,0 +1,49 @@
+.label {margin-right:5px;margin-bottom:5px !important;display:inline-block;} #wrapper {
+    position: relative;
+}
+
+.required-label::after {
+    content: " *";
+    color: red;
+}
+
+.padding {
+    padding: 0 5px;
+}
+
+.padding_up {
+    padding-top: 5px;
+}
+
+.padding-left {
+    padding-left: 14px;
+}
+
+.unsave-change {
+    background-color: #ffff66;
+}
+
+.onClick {
+    background-color: #99ff99
+}
+
+.resizeImage {
+    height: 50px;
+    width: auto
+}
+
+.margin_top {
+    margin-top: 3px;
+}
+
+.row.display-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.side-bar-username {
+    padding: 15px 10px !important;
+    font-size: 18px;
+    color: #b5cad4;
+    background: #1a2226;
+}

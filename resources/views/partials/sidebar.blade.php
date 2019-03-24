@@ -11,7 +11,6 @@
                     <span class="title">@lang('global.app_dashboard')</span>
                 </a>
             </li>
-            {{-- @can('admin_access') --}}
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-briefcase"></i>
@@ -44,18 +43,52 @@
             </li>
             @endif
 
-            <li>
-                <a href="{{ url('#') }}">
-                    <i class="fa fa-gift"></i>
-                    <span class="title">Product Management</span>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa fa-gift"></i>
+                    <span>Prize Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ route('admin.prizes.index') }}">
+                            <i class="fa fa-gift"></i>
+                            <span class="title">Prize</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.prize_types.index') }}">
+                            <i class="fa fa-gift"></i>
+                            <span class="title">Prize Type</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
-            <li>
-                <a href="{{ url('#') }}">
+            <li class="treeview">
+                <a href="#">
                     <i class="fa fa-child"></i>
-                    <span class="title">Activity Management</span>
+                    <span>Activity Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="{{ url('#') }}">
+                            <i class="fa fa-child"></i>
+                            <span class="title">Activity</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('#') }}">
+                            <i class="fa fa-child"></i>
+                            <span class="title">Activity Type</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="treeview">

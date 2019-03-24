@@ -18,7 +18,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin') {
             return abort(401);
         }
 
@@ -46,7 +47,8 @@ class UsersController extends Controller
             $table->addColumn('actions', '&nbsp;');
             $table->editColumn('actions', function ($row) use ($template) {
                 $routeKey = 'admin.users';
-                return view($template, compact('row', 'routeKey'));
+                $premission = 'all';
+                return view($template, compact('row', 'routeKey', 'premission'));
             });
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
@@ -94,7 +96,7 @@ class UsersController extends Controller
             'student' => 'Student'
         ];
         $classrooms = \App\Classroom::select('classrooms.name', 'classrooms.id')
-            ->join('years AS y', 'classrooms.years_id', '=', 'y.id')
+            ->join('years AS y', 'classrooms.year_id', '=', 'y.id')
             ->where('y.choose', 1)
             ->get()
             ->pluck('name', 'id')
@@ -138,7 +140,7 @@ class UsersController extends Controller
             'student' => 'Student'
         ];
         $classrooms = \App\Classroom::select('classrooms.name', 'classrooms.id')
-            ->join('years AS y', 'classrooms.years_id', '=', 'y.id')
+            ->join('years AS y', 'classrooms.year_id', '=', 'y.id')
             ->where('y.choose', 1)
             ->get()
             ->pluck('name', 'id')

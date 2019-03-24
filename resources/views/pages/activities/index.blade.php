@@ -2,16 +2,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="page-title">Prize</h3>
+    <h3 class="page-title">Activity</h3>
     @if ($premission != 'readOnly')
     <p>
-        <a href="{{ route('admin.prizes.create') }}" class="btn btn-success">@lang('global.app_add_new')</a>
+        <a href="{{ route('admin.activities.create') }}" class="btn btn-success">@lang('global.app_add_new')</a>
     </p>
     @endif
     <p>
         <ul class="list-inline">
-            <li><a href="{{ route('admin.prizes.index') }}" style="{{ request('show_deleted') == 1 ? '' : 'font-weight: 700' }}">@lang('global.app_all')</a></li> |
-            <li><a href="{{ route('admin.prizes.index') }}?show_deleted=1" style="{{ request('show_deleted') == 1 ? 'font-weight: 700' : '' }}">@lang('global.app_trash')</a></li>
+            <li><a href="{{ route('admin.activities.index') }}" style="{{ request('show_deleted') == 1 ? '' : 'font-weight: 700' }}">@lang('global.app_all')</a></li> |
+            <li><a href="{{ route('admin.activities.index') }}?show_deleted=1" style="{{ request('show_deleted') == 1 ? 'font-weight: 700' : '' }}">@lang('global.app_trash')</a></li>
         </ul>
     </p>
 
@@ -33,7 +33,7 @@
                         <th>Sticker Amount</th>
                         <th>Image</th>
                         {{-- <th>Detail</th> --}}
-                        {{-- <th>Date</th> --}}
+                        <th>Date</th>
                         <th>Year</th>
                         <th>Last Update</th>
                         @if( request('show_deleted') == 1 )
@@ -50,9 +50,9 @@
 
 @section('javascript')
     <script>
-        @if ( request('show_deleted') != 1 ) window.route_mass_crud_entries_destroy = '{{ route('admin.prizes.mass_destroy') }}'; @endif
+        @if ( request('show_deleted') != 1 ) window.route_mass_crud_entries_destroy = '{{ route('admin.activities.mass_destroy') }}'; @endif
         $(document).ready(function () {
-            window.dtDefaultOptions.ajax = '{!! route('admin.prizes.index') !!}?show_deleted={{ request('show_deleted') }}';
+            window.dtDefaultOptions.ajax = '{!! route('admin.activities.index') !!}?show_deleted={{ request('show_deleted') }}';
             window.dtDefaultOptions.columns = [
                 @if ( request('show_deleted') != 1 )
                     {data: 'massDelete', name: 'id', searchable: false, sortable: false},
@@ -62,7 +62,7 @@
                 {data: 'sticker_amount', name: 'sticker_amount'},
                 {data: 'image_url', name: 'image_url'},
                 // {data: 'detail', name: 'detail'},
-                // {data: 'date', name: 'date'},
+                {data: 'date', name: 'date'},
                 {data: 'year.name', name: 'year.name'},
                 {data: 'updated_at', name: 'updated_at'},
 

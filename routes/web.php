@@ -34,4 +34,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('prizes_mass_destroy', ['uses' => 'PrizesController@massDestroy', 'as' => 'prizes.mass_destroy']);
     Route::post('prizes_restore/{id}', ['uses' => 'PrizesController@restore', 'as' => 'prizes.restore']);
     Route::delete('prizes_del/{id}', ['uses' => 'PrizesController@perma_del', 'as' => 'prizes.perma_del']);
+
+    Route::resource('activities', 'ActivitiesController');
+    Route::post('activities_mass_destroy', ['uses' => 'ActivitiesController@massDestroy', 'as' => 'activities.mass_destroy']);
+    Route::post('activities_restore/{id}', ['uses' => 'ActivitiesController@restore', 'as' => 'activities.restore']);
+    Route::delete('activities_del/{id}', ['uses' => 'ActivitiesController@perma_del', 'as' => 'activities.perma_del']);
+
+    Route::resource('activity_types', 'ActivityTypesController');
+    Route::post('activity_types_mass_destroy', ['uses' => 'ActivityTypesController@massDestroy', 'as' => 'activity_types.mass_destroy']);
+    Route::post('activity_types_restore/{id}', ['uses' => 'ActivityTypesController@restore', 'as' => 'activity_types.restore']);
+    Route::delete('activity_types_del/{id}', ['uses' => 'ActivityTypesController@perma_del', 'as' => 'activity_types.perma_del']);
 });

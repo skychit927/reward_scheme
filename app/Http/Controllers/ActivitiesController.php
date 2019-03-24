@@ -11,7 +11,7 @@ use App\Http\Controllers\Traits\FileUploadTrait;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
-class PrizesController extends Controller
+class ActivitiesController extends Controller
 {
     use FileUploadTrait;
 
@@ -23,16 +23,12 @@ class PrizesController extends Controller
         }
 
         $premission = 'all';
-        if($user->role == 'teacher'){
-            $premission = 'readOnly';
-        }
-
         if (request()->ajax()) {
             $query = Event::query();
             $query->with('event_type');
             $query->with('year');
             $query->whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+                $query->where('sort', 'activity');
             });
             $template = 'actionsTemplate';
             if(request('show_deleted') == 1) {
@@ -59,7 +55,7 @@ class PrizesController extends Controller
             $table->addColumn('massDelete', '&nbsp;');
             $table->addColumn('actions', '&nbsp;');
             $table->editColumn('actions', function ($row) use ($template, $premission) {
-                $routeKey = 'admin.prizes';
+                $routeKey = 'admin.activities';
                 return view($template, compact('row', 'routeKey', 'premission'));
             });
             $table->editColumn('name', function ($row) {
@@ -82,9 +78,9 @@ class PrizesController extends Controller
             // $table->editColumn('detail', function ($row) {
             //     return $row->detail ? $row->detail : '';
             // });
-            // $table->editColumn('date', function ($row) {
-            //     return $row->date ? $row->date : 'Not Applicable';
-            // });
+            $table->editColumn('date', function ($row) {
+                return $row->date ? $row->date : '';
+            });
             $table->editColumn('year.name', function ($row) {
                 return $row->year ? $row->year->name : '';
             });
@@ -97,64 +93,68 @@ class PrizesController extends Controller
             return $table->make(true);
         }
 
-        return view('pages.prizes.index', compact('premission'));
+        return view('pages.activities.index', compact('premission'));
     }
 
     public function create()
     {
         $user = \Auth::user();
-        if ($user->role != 'admin') {
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
-        $prize_types = \App\EventType::where('sort', 'prize')
+        $activity_types = \App\EventType::where('sort', 'activity')
             ->get()
             ->pluck('name', 'id')
             ->prepend(trans('global.app_please_select'), '');
 
         $years = \App\Year::get()->pluck('name', 'id')->prepend(trans('global.app_please_select'), '');
-        return view('pages.prizes.create', compact('prize_types', 'years'));
+        return view('pages.activities.create', compact('activity_types', 'years'));
     }
 
     public function store(Request $request)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
         $request = $this->saveFiles($request);
-        $prize = Event::create($request->all());
-        return redirect()->route('admin.prizes.index');
+        $activity = Event::create($request->all());
+        return redirect()->route('admin.activities.index');
     }
 
     public function edit($id)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
-        $prize = Event::whereHas('event_type', function ($query) {
-            $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+            $query->where('sort', 'activity');
         })->findOrFail($id);
 
-        $prize_types = \App\EventType::where('sort', 'prize')
+        $activity_types = \App\EventType::where('sort', 'activity')
             ->get()
             ->pluck('name', 'id')
             ->prepend(trans('global.app_please_select'), '');
 
         $years = \App\Year::get()->pluck('name', 'id')->prepend(trans('global.app_please_select'), '');
-        return view('pages.prizes.edit', compact('prize', 'prize_types', 'years'));
+        return view('pages.activities.edit', compact('activity', 'activity_types', 'years'));
     }
 
     public function update(Request $request, $id)
     {
-        if (\Auth::user()->role != 'admin') {
+        // dd($request);
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
 
         $request = $this->saveFiles($request);
-        $prize = Event::whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+                $query->where('sort', 'activity');
             })->findOrFail($id);
-        $prize->update($request->all());
-        return redirect()->route('admin.prizes.index');
+        $activity->update($request->all());
+        return redirect()->route('admin.activities.index');
     }
 
     public function show($id)
@@ -164,38 +164,39 @@ class PrizesController extends Controller
             return abort(401);
         }
 
-        $prize = Event::whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+                $query->where('sort', 'activity');
             })
             ->with('event_type')
             ->with('year')
             ->findOrFail($id);
-        return view('pages.prizes.show', compact('prize'));
+        return view('pages.activities.show', compact('activity'));
     }
 
     public function destroy($id)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
-
-        $prize = Event::whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+                $query->where('sort', 'activity');
             })->findOrFail($id);
-        $prize->delete();
+        $activity->delete();
 
-        return redirect()->route('admin.prizes.index');
+        return redirect()->route('admin.activities.index');
     }
 
     public function massDestroy(Request $request)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
         if ($request->input('ids')) {
             $entries = Event::whereIn('id', $request->input('ids'))
                 ->whereHas('event_type', function ($query) {
-                    $query->where('sort', 'prize');
+                    $query->where('sort', 'activity');
                 })
                 ->get();
 
@@ -207,32 +208,34 @@ class PrizesController extends Controller
 
     public function restore($id)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
-        $prize = Event::whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+                $query->where('sort', 'activity');
             })
             ->onlyTrashed()
             ->findOrFail($id);
-        $prize->restore();
+        $activity->restore();
 
-        return redirect()->route('admin.prizes.index');
+        return redirect()->route('admin.activities.index');
     }
 
     public function perma_del($id)
     {
-        if (\Auth::user()->role != 'admin') {
+        $user = \Auth::user();
+        if ($user->role != 'admin' && $user->role != 'teacher') {
             return abort(401);
         }
-        $prize = Event::whereHas('event_type', function ($query) {
-                $query->where('sort', 'prize');
+        $activity = Event::whereHas('event_type', function ($query) {
+                $query->where('sort', 'activity');
             })
             ->onlyTrashed()
             ->findOrFail($id);
-        $prize->forceDelete();
+        $activity->forceDelete();
 
-        return redirect()->route('admin.prizes.index');
+        return redirect()->route('admin.activities.index');
     }
 
 }

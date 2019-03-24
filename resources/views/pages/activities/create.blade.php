@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="page-title">Prize</h3>
+    <h3 class="page-title">Activity</h3>
     {!! Form::open(['method' => 'POST', 'route' => ['admin.activities.store'], 'files' => true,]) !!}
 
     <div class="panel panel-default">
@@ -25,8 +25,8 @@
 
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('event_type_id', 'Prize Type', ['class' => 'control-label']) !!}
-                    {!! Form::select('event_type_id', $prize_types, old('event_type_id'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::label('event_type_id', 'Activity Type', ['class' => 'control-label']) !!}
+                    {!! Form::select('event_type_id', $activity_types, old('event_type_id'), ['class' => 'form-control select2', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('event_type_id'))
                         <p class="help-block">
@@ -76,7 +76,7 @@
                 @endif
             </div>
 
-            {{-- <div class="form-group">
+            <div class="form-group">
                 {!! Form::label('date', 'Date', ['class' => 'control-label']) !!}
                 {!! Form::text('date', old('date'), ['class' => 'form-control date', 'placeholder' => '']) !!}
                 <p class="help-block"></p>
@@ -85,7 +85,7 @@
                         {{ $errors->first('date') }}
                     </p>
                 @endif
-            </div> --}}
+            </div>
 
             <div class="row">
                 <div class="col-xs-12 form-group">
@@ -109,7 +109,7 @@
 
 @section('javascript')
     @parent
-    {{-- <script src="{{ url('adminlte/plugins/datetimepicker/moment-with-locales.min.js') }}"></script>
+    <script src="{{ url('adminlte/plugins/datetimepicker/moment-with-locales.min.js') }}"></script>
     <script src="{{ url('adminlte/plugins/datetimepicker/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         $(function(){
@@ -122,5 +122,5 @@
                 locale: "{{ App::getLocale() }}",
             });
         });
-    </script> --}}
+    </script>
 @stop

@@ -77,13 +77,13 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="{{ url('#') }}">
+                        <a href="{{ route('admin.activities.index') }}">
                             <i class="fa fa-child"></i>
                             <span class="title">Activity</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('#') }}">
+                        <a href="{{ route('admin.activity_types.index') }}">
                             <i class="fa fa-child"></i>
                             <span class="title">Activity Type</span>
                         </a>

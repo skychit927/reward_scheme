@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="page-title">Prize</h3>
-    {!! Form::open(['method' => 'POST', 'route' => ['admin.activities.store'], 'files' => true,]) !!}
+    <h3 class="page-title">Activity</h3>
+
+    {!! Form::model($activity, ['method' => 'PUT', 'route' => ['admin.activities.update', $activity->id], 'files' => true,]) !!}
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            @lang('global.app_create')
+            @lang('global.app_edit')
         </div>
 
         <div class="panel-body">
@@ -25,8 +26,8 @@
 
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    {!! Form::label('event_type_id', 'Prize Type', ['class' => 'control-label']) !!}
-                    {!! Form::select('event_type_id', $prize_types, old('event_type_id'), ['class' => 'form-control select2', 'required' => '']) !!}
+                    {!! Form::label('event_type_id', 'Activity Type', ['class' => 'control-label']) !!}
+                    {!! Form::select('event_type_id', $activity_types, old('event_type_id'), ['class' => 'form-control select2', 'required' => '']) !!}
                     <p class="help-block"></p>
                     @if($errors->has('event_type_id'))
                         <p class="help-block">
@@ -52,6 +53,11 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     {!! Form::label('image_url', 'Image', ['class' => 'control-label']) !!}
+                    @if ($activity->image_url)
+                        <a href="{{ asset(env('UPLOAD_PATH').'/'.$activity->image_url) }}" target="_blank">
+                            <img src="{{ asset(env('UPLOAD_PATH').'/thumb/'.$activity->image_url) }}">
+                        </a>
+                    @endif
                     {!! Form::file('image_url', ['class' => 'form-control', 'style' => 'margin-top: 4px;']) !!}
                     {!! Form::hidden('image_url_max_size', 2) !!}
                     {!! Form::hidden('image_url_max_width', 4096) !!}
@@ -76,7 +82,7 @@
                 @endif
             </div>
 
-            {{-- <div class="form-group">
+            <div class="form-group">
                 {!! Form::label('date', 'Date', ['class' => 'control-label']) !!}
                 {!! Form::text('date', old('date'), ['class' => 'form-control date', 'placeholder' => '']) !!}
                 <p class="help-block"></p>
@@ -85,7 +91,7 @@
                         {{ $errors->first('date') }}
                     </p>
                 @endif
-            </div> --}}
+            </div>
 
             <div class="row">
                 <div class="col-xs-12 form-group">
@@ -103,13 +109,13 @@
         </div>
     </div>
 
-    {!! Form::submit(trans('global.app_save'), ['class' => 'btn btn-danger']) !!}
+    {!! Form::submit(trans('global.app_update'), ['class' => 'btn btn-danger']) !!}
     {!! Form::close() !!}
 @stop
 
 @section('javascript')
     @parent
-    {{-- <script src="{{ url('adminlte/plugins/datetimepicker/moment-with-locales.min.js') }}"></script>
+    <script src="{{ url('adminlte/plugins/datetimepicker/moment-with-locales.min.js') }}"></script>
     <script src="{{ url('adminlte/plugins/datetimepicker/bootstrap-datetimepicker.min.js') }}"></script>
     <script>
         $(function(){
@@ -122,5 +128,5 @@
                 locale: "{{ App::getLocale() }}",
             });
         });
-    </script> --}}
+    </script>
 @stop

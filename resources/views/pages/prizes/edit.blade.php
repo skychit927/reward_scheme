@@ -3,7 +3,7 @@
 @section('content')
     <h3 class="page-title">Prize</h3>
 
-    {!! Form::model($prize, ['method' => 'PUT', 'route' => ['admin.prizes.update', $prize->id]]) !!}
+    {!! Form::model($prize, ['method' => 'PUT', 'route' => ['admin.prizes.update', $prize->id], 'files' => true,]) !!}
 
     <div class="panel panel-default">
         <div class="panel-heading">

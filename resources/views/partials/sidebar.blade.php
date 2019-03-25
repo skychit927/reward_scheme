@@ -116,7 +116,7 @@
                     </li>
                     @if (\Auth::user()->role === 'admin' || \Auth::user()->role === 'teacher')
                     <li>
-                        <a href="#">
+                        <a href="{{ route('admin.records.sticker') }}">
                             <i class="fa fa-list-alt"></i>
                             <span class="title">Student Sticker Record</span>
                         </a>

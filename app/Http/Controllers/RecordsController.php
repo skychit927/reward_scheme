@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Transition;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\DataTables\DataTables;
@@ -32,6 +33,11 @@ class RecordsController extends Controller
             $query->whereHas('event.event_type', function($query){
                 $query->where('sort', 'activity');
             });
+
+            $user = \Auth::user();
+            if($user->role == 'student'){
+                $query->where('student_id', $user->id);
+            }
 
 
             $table = Datatables::of($query);
@@ -124,6 +130,11 @@ class RecordsController extends Controller
                 $query->where('sort', 'prize');
             });
 
+            $user = \Auth::user();
+            if($user->role == 'student'){
+                $query->where('student_id', $user->id);
+            }
+
             $table = Datatables::of($query);
             $table->setRowAttr([
                 'data-entry-id' => '{{$id}}',
@@ -190,5 +201,55 @@ class RecordsController extends Controller
         }
 
         return view('pages.record.prize_record');
+    }
+
+    public function StickerRecord(){
+        $user = \Auth::user();
+        if($user->role == 'student'){
+            return abort(401);
+        }
+
+        if (request()->ajax()) {
+            $query = User::query();
+            $query->with(['transition' => function($query){
+                $query->where('status', 'S');
+                $query->with('event.event_type');
+            }]);
+
+            $query->where('role', 'student');
+
+            $table = Datatables::of($query);
+            $table->setRowAttr([
+                'data-entry-id' => '{{$id}}',
+            ]);
+
+            $table->editColumn('name', function ($row) {
+                return $row->name ? $row->name : '';
+            });
+
+            $table->editColumn('sticker_amount', function ($row) {
+                if(count($row->transition) == 0) {
+                    return 0;
+                }
+
+                $sum = 0;
+                foreach ($row->transition as $item) {
+                    foreach ($item['event'] as $event) {
+                        if($event['event_type']['sort'] == 'activity'){
+                            $sum += $event['sticker_amount'] * $event['pivot']['qty'];
+                        } else if ($event['event_type']['sort'] == 'prize'){
+                            $sum -= $event['sticker_amount'] * $event['pivot']['qty'];
+                        }
+                    }
+                }
+                return $sum;
+            });
+
+            // $table->rawColumns(['prize.name']);
+            return $table->make(true);
+
+        }
+
+        return view('pages.record.sticker_record');
     }
 }

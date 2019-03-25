@@ -39,4 +39,9 @@ class User extends Authenticatable
         return $this->belongsTo(Classroom::class, 'classroom_id')->withTrashed();
     }
 
+    public function transition()
+    {
+        return $this->hasMany(Transition::class, 'student_id');
+    }
+
 }

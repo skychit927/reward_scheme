@@ -43,6 +43,7 @@
             </li>
             @endif
 
+            @if (\Auth::user()->role === 'admin' || \Auth::user()->role === 'teacher')
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa fa-gift"></i>
@@ -90,6 +91,7 @@
                     </li>
                 </ul>
             </li>
+            @endif
 
             <li class="treeview">
                 <a href="#">
@@ -101,29 +103,25 @@
                 </a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="#">
+                        <a href="{{ route('admin.records.activity') }}">
                             <i class="fa fa-list-alt"></i>
-                            <span class="title">Student Activity</span>
+                            <span class="title">Activity Record</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{ route('admin.records.prize') }}">
                             <i class="fa fa-list-alt"></i>
-                            <span class="title">Student Redemption</span>
+                            <span class="title">Prize Record</span>
                         </a>
                     </li>
+                    @if (\Auth::user()->role === 'admin' || \Auth::user()->role === 'teacher')
                     <li>
                         <a href="#">
                             <i class="fa fa-list-alt"></i>
-                            <span class="title">Student Sticker</span>
+                            <span class="title">Student Sticker Record</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-list-alt"></i>
-                            <span class="title">Teacher Distribution Sticker</span>
-                        </a>
-                    </li>
+                    @endif
                 </ul>
             </li>
         </ul>

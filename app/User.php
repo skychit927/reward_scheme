@@ -12,7 +12,7 @@ class User extends Authenticatable
     use Notifiable, SoftDeletes;
     protected $fillable = [
         'name',
-        'classrooms_id',
+        'classroom_id',
         'classNo',
         'username',
         'password',
@@ -29,12 +29,6 @@ class User extends Authenticatable
             $this->attributes['password'] = app('hash')->needsRehash($input) ? Hash::make($input) : $input;
     }
 
-    public function setClassroomsIdAttribute($input)
-    {
-        if ($input === '')
-            $this->attributes['password'] = null;
-    }
-
     public function sendPasswordResetNotification($token)
     {
        $this->notify(new ResetPassword($token));
@@ -42,7 +36,7 @@ class User extends Authenticatable
 
     public function classroom()
     {
-        return $this->belongsTo(Classroom::class, 'classrooms_id')->withTrashed();
+        return $this->belongsTo(Classroom::class, 'classroom_id')->withTrashed();
     }
 
 }

@@ -44,4 +44,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('activity_types_mass_destroy', ['uses' => 'ActivityTypesController@massDestroy', 'as' => 'activity_types.mass_destroy']);
     Route::post('activity_types_restore/{id}', ['uses' => 'ActivityTypesController@restore', 'as' => 'activity_types.restore']);
     Route::delete('activity_types_del/{id}', ['uses' => 'ActivityTypesController@perma_del', 'as' => 'activity_types.perma_del']);
+
+    Route::get('activity_records', ['uses' => 'RecordsController@activityRecord', 'as' => 'records.activity']);
+    Route::get('prize_records', ['uses' => 'RecordsController@prizeRecord', 'as' => 'records.prize']);
 });

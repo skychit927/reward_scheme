@@ -34,7 +34,7 @@ class UsersController extends Controller
             $query->select([
                 'users.id',
                 'users.name',
-                'users.classrooms_id',
+                'users.classroom_id',
                 'users.classNo',
                 'users.role',
             ]);
@@ -161,7 +161,7 @@ class UsersController extends Controller
         if (\Auth::user()->role != 'admin') {
             return abort(401);
         }
-
+        // dd($request->all());
         $user = User::findOrFail($id);
         $user->update($request->all());
         return redirect()->route('admin.users.index');

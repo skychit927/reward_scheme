@@ -43,6 +43,15 @@
             </li>
             @endif
 
+            @if (\Auth::user()->role === 'teacher')
+            <li>
+                <a href="{{ route('admin.distribution.list') }}">
+                    <i class="fa fa-users"></i>
+                    <span class="title">Distribution Management</span>
+                </a>
+            </li>
+            @endif
+
             @if (\Auth::user()->role === 'admin' || \Auth::user()->role === 'teacher')
             <li class="treeview">
                 <a href="#">

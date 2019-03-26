@@ -49,4 +49,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::get('prize_records', ['uses' => 'RecordsController@prizeRecord', 'as' => 'records.prize']);
     Route::get('sticker_records', ['uses' => 'RecordsController@StickerRecord', 'as' => 'records.sticker']);
 
+    Route::get('distribution', ['uses' => 'DistributionController@Distribution', 'as' => 'distribution.list']);
+    Route::post('distribution_add', ['uses' => 'DistributionController@AddActivity', 'as' => 'distribution.add']);
+
 });

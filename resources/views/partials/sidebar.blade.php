@@ -11,29 +11,14 @@
                     <span class="title">@lang('global.app_dashboard')</span>
                 </a>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-briefcase"></i>
-                    <span>General</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
+
+            <li class="{{ $request->segment(1) == 'change_password' ? 'active' : '' }}">
+                <a href="{{ route('auth.change_password') }}">
+                    <i class="fa fa-key"></i>
+                    <span class="title">@lang('global.app_change_password')</span>
                 </a>
-                <ul class="treeview-menu">
-                    <li class="{{ $request->segment(1) == 'change_password' ? 'active' : '' }}">
-                        <a href="{{ route('auth.change_password') }}">
-                            <i class="fa fa-key"></i>
-                            <span class="title">@lang('global.app_change_password')</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#logout" onclick="$('#logout').submit();">
-                            <i class="fa fa-sign-out"></i>
-                            <span class="title">@lang('global.app_logout')</span>
-                        </a>
-                    </li>
-                </ul>
             </li>
+
             @if (\Auth::user()->role === 'admin')
             <li>
                 <a href="{{ route('admin.users.index') }}">

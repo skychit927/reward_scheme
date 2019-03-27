@@ -18,6 +18,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
+
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a style="pointer-events: none" href="#">{!! \Auth::user()->name !!}</a>
+                </li>
+                <li>
+                    <a href="#logout" onclick="$('#logout').submit();">
+                        <i class="fa fa-sign-out"></i>
+                        <span class="title">@lang('global.app_logout')</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
         {{-- {!! Form::select('select_location_fiter',
             \Auth::user()->location->pluck('name', 'id'),
             array_key_exists('location_id', $_COOKIE) ? $_COOKIE['location_id'] : null,

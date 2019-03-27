@@ -17,17 +17,7 @@ class DistributionController extends Controller
         if ($user->role != 'teacher') {
             return abort(401);
         }
-
-        $activitys = \App\Event::select(
-            DB::raw('CONCAT(name, " | Date: ", date ," | Sticker Amount: ", sticker_amount) AS name'),
-            'id'
-        )
-        ->whereHas('event_type', function ($query) {
-            $query->where('sort', 'activity');
-        })
-        ->get()
-        ->pluck('name', 'id')
-        ->prepend(trans('global.app_please_select'), '');
+        // return ($activitys);
 
         if (request()->ajax()) {
             $query = User::query();
@@ -44,15 +34,13 @@ class DistributionController extends Controller
             ]);
             $table = Datatables::of($query);
 
-
             $table->setRowAttr([
                 'data-entry-id' => '{{$id}}',
             ]);
 
             $table->addColumn('actions', '&nbsp;');
-            $table->editColumn('actions', function ($row) use ($template, $activitys) {
-
-                return view($template, compact('row', 'activitys'));
+            $table->editColumn('actions', function ($row) use ($template) {
+                return view($template, compact('row'));
             });
 
             $table->editColumn('name', function ($row) {
@@ -71,6 +59,30 @@ class DistributionController extends Controller
         return view('pages.distribution.list');
 
     }
+
+    public function add($id)
+    {
+        $user = \Auth::user();
+        if ($user->role != 'teacher') {
+            return abort(401);
+        }
+        $activitys = \App\Event::select(
+            DB::raw('CONCAT(name, " | Sticker Amount: ", sticker_amount) AS name'),
+            'id'
+        )
+        ->whereHas('event_type', function ($query) {
+            $query->where('sort', 'activity');
+        })
+        ->whereHas('year', function ($query) {
+            $query->where('choose', 1);
+        })
+        ->get()
+        ->pluck('name', 'id')
+        ->prepend(trans('global.app_please_select'), '');
+
+        return view('pages.distribution.add', compact('id', 'activitys'));
+    }
+
 
     public function AddActivity(Request $request){
         $user = \Auth::user();

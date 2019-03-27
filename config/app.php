@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Hong_Kong',
     'date_format_moment' => 'YYYY-MM-DD',
 
     /*

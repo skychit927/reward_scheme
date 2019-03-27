@@ -37,10 +37,19 @@
             </li>
             @endif
 
+            @if (\Auth::user()->role === 'student')
+            <li>
+                <a href="{{ route('admin.redeem_prize.list') }}">
+                    <i class="fa fa-gift"></i>
+                    <span class="title">Redeem Prize</span>
+                </a>
+            </li>
+            @endif
+
             @if (\Auth::user()->role === 'admin' || \Auth::user()->role === 'teacher')
             <li class="treeview">
                 <a href="#">
-                    <i class="fa fa fa-gift"></i>
+                    <i class="fa fa-gift"></i>
                     <span>Prize Management</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>

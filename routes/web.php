@@ -51,8 +51,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
     Route::get('distribution', ['uses' => 'DistributionController@Distribution', 'as' => 'distribution.list']);
     Route::get('distribution_add/{id}', ['uses' => 'DistributionController@add', 'as' => 'distribution.addPage']);
-
-
     Route::post('distribution_add', ['uses' => 'DistributionController@AddActivity', 'as' => 'distribution.add']);
+
+    Route::get('redeem_prize', ['uses' => 'RedeemPrizeContoller@RedeemPrize', 'as' => 'redeem_prize.list']);
 
 });

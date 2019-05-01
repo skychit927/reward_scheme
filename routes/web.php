@@ -2,6 +2,9 @@
 Route::get('/', function () { return redirect('/admin/home'); });
 
 // Authentication Routes...
+$this->get('test', function(){
+    return $auth->user->sticker;
+});
 $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
 $this->post('login', 'Auth\LoginController@login')->name('auth.login');
 $this->post('logout', 'Auth\LoginController@logout')->name('auth.logout');
@@ -18,6 +21,10 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('auth.
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/home', 'HomeController@index');
+
+    $this->get('test', function(){
+        return \Auth::user()->sticker;
+    });
 
     // user CRUD
     Route::resource('users', 'UsersController');
@@ -54,5 +61,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('distribution_add', ['uses' => 'DistributionController@AddActivity', 'as' => 'distribution.add']);
 
     Route::get('redeem_prize', ['uses' => 'RedeemPrizeContoller@RedeemPrize', 'as' => 'redeem_prize.list']);
+    Route::get('redeem_prize_add/{id}', ['uses' => 'RedeemPrizeContoller@add', 'as' => 'redeem_prize.addPage']);
+    Route::post('redeem_prize_add/cart', ['uses' => 'RedeemPrizeContoller@addCart', 'as' => 'redeem_prize.addCart']);
 
+    Route::get('shopping_cart', ['uses' => 'ShoppingCartController@getShopingCartList', 'as' => 'shopping.show']);
+    Route::get('request_accept/{id}', ['uses' => 'ShoppingCartController@accept', 'as' => 'request.accept']);
+    Route::get('request_deline/{id}', ['uses' => 'ShoppingCartController@deline', 'as' => 'request.deline']);
 });

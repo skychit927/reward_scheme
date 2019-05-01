@@ -4,7 +4,12 @@
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
         <ul class="sidebar-menu">
-            <li class="side-bar-username">Welcome, {!! \Auth::user()->name !!}</li>
+            <li class="side-bar-username">
+                <div>Welcome, {!! \Auth::user()->name !!}</div>
+                @if (\Auth::user()->role === 'student')
+                    <div>You have {!! \Auth::user()->sticker !!} sticker</div>
+                @endif
+            </li>
             <li class="{{ $request->segment(1) == 'home' ? 'active' : '' }}">
                 <a href="{{ url('/') }}">
                     <i class="fa fa-tachometer"></i>
@@ -24,6 +29,15 @@
                 <a href="{{ route('admin.users.index') }}">
                     <i class="fa fa-users"></i>
                     <span class="title">User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.shopping.show') }}">
+                    <i class="fa fa-list-alt "></i>
+                    <span class="title">Redeem Prize Request</span>
+                    @if( \Auth::user()->request > 0)
+                        <span class="label label-success pull-right" style="margin-top: 4px;">{!! \Auth::user()->request !!}</span>
+                    @endif
                 </a>
             </li>
             @endif

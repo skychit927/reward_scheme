@@ -23,6 +23,47 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getRequestAttribute(){
+        if($this->role != 'admin'){
+            return null;
+        } else {
+            $query = Transition::query();
+            $query->where('status', 'P');
+            // $query->has('prize');
+            return $query->count();
+        }
+    }
+
+    public function getStickerAttribute()
+    {
+        if($this->role != 'student'){
+            return null;
+        } else {
+            $prizeSum = 0;
+            $activitySum = 0;
+
+            $query = Transition::query();
+            $query->with('prize');
+            $query->with('activity');
+            $query->where('student_id', $this->id);
+            $query->where(function ($query) {
+                $query->where('status', 'S');
+                $query->orWhere('status', 'P');
+            });
+            $transactions = $query->get();
+            foreach ($transactions as $transaction) {
+                foreach ($transaction->prize as $singlePrize) {
+                    $prizeSum += $singlePrize->sticker_amount * $singlePrize->pivot->qty;
+                }
+
+                foreach ($transaction->activity as $singleActivity) {
+                    $activitySum += $singleActivity->sticker_amount * $singleActivity->pivot->qty;
+                }
+            }
+            return $activitySum - $prizeSum;
+        }
+    }
+
     public function setPasswordAttribute($input)
     {
         if ($input)

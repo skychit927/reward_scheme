@@ -21,6 +21,12 @@
 
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                {{-- <li>
+                    <a href="{{ route('admin.shopping.show') }} class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="label label-success">{!! \Auth::user()->shopping !!}</span>
+                    </a>
+                </li> --}}
                 <li>
                     <a style="pointer-events: none" href="#">{!! \Auth::user()->name !!}</a>
                 </li>

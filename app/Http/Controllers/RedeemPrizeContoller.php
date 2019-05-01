@@ -95,40 +95,39 @@ class RedeemPrizeContoller extends Controller
     public function add($id)
     {
         $user = \Auth::user();
-        if ($user->role != 'teacher') {
+        if ($user->role != 'student') {
             return abort(401);
         }
-        $activitys = \App\Event::select(
-            DB::raw('CONCAT(name, " | Sticker Amount: ", sticker_amount) AS name'),
-            'id'
-        )
-        ->whereHas('event_type', function ($query) {
-            $query->where('sort', 'activity');
-        })
-        ->whereHas('year', function ($query) {
-            $query->where('choose', 1);
-        })
-        ->get()
-        ->pluck('name', 'id')
-        ->prepend(trans('global.app_please_select'), '');
 
-        return view('pages.distribution.add', compact('id', 'activitys'));
+        $query = Event::query();
+        $query->with('year');
+        $query->whereHas('event_type', function ($query) {
+            $query->where('sort', 'prize');
+        });
+        $query->whereHas('year', function ($query) {
+            $query->where('choose', 1);
+        });
+        $prize = $query->findOrFail($id);
+
+
+
+        return view('pages.reedeem_prize.add', compact('id', 'prize'));
     }
 
 
-    public function AddActivity(Request $request){
+    public function AddCart(Request $request){
         $user = \Auth::user();
-        if ($user->role != 'teacher') {
+        if ($user->role != 'student') {
             return abort(401);
         }
 
         $transition = new Transition;
-        $transition->student_id = $request->input('student_id');
-        $transition->handler_id = $user->id;
-        $transition->status = 'S';
+        $transition->student_id = $user->id;
+        $transition->handler_id = null;
+        $transition->status = 'P';
         $transition->save();
 
-        $transition->event()->attach($request->input('event_id'), ['qty' => 1]);
-        return view('pages.distribution.list');
+        $transition->event()->attach($request->input('event_id'), ['qty' => $request->input('qty')]);
+        return view('pages.reedeem_prize.list');
     }
 }

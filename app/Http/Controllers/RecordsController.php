@@ -212,7 +212,7 @@ class RecordsController extends Controller
         if (request()->ajax()) {
             $query = User::query();
             $query->with(['transition' => function($query){
-                $query->where('status', 'S');
+                $query->whereIn('status', ['S', 'P']);
                 $query->with('event.event_type');
             }]);
 

@@ -64,6 +64,28 @@ class User extends Authenticatable
         }
     }
 
+    public function getStickerplusAttribute()
+    {
+        if($this->role != 'student'){
+            return null;
+        } else {
+            $activitySum = 0;
+            $query = Transition::query();
+            $query->with('activity');
+            $query->where('student_id', $this->id);
+            $query->where(function ($query) {
+                $query->where('status', 'S');
+            });
+            $transactions = $query->get();
+            foreach ($transactions as $transaction) {
+                foreach ($transaction->activity as $singleActivity) {
+                    $activitySum += $singleActivity->sticker_amount * $singleActivity->pivot->qty;
+                }
+            }
+            return $activitySum;
+        }
+    }
+
     public function setPasswordAttribute($input)
     {
         if ($input)

@@ -13,8 +13,8 @@
                 <thead>
                     <tr>
                         <th>Student Name</th>
-                        <th>Sticker Classroom</th>
-                        <th>Sticker Class Number</th>
+                        <th>Classroom</th>
+                        <th>Class Number</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>

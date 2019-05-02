@@ -35,7 +35,8 @@ class HomeController extends Controller
                 LEFT JOIN `events` e ON e.id = te.event_id
                 LEFT JOIN event_types et ON et.id = e.event_type_id
                 WHERE u.role = 'student' AND (et.sort = 'activity' OR et.sort IS NULL )
-                GROUP BY u.id"
+                GROUP BY u.id
+                ORDER BY sticker desc"
             )
         );
 
@@ -59,13 +60,13 @@ class HomeController extends Controller
         $prize_list = DB::select(
             DB::raw(
                 "SELECT e.NAME AS 'name', e.sticker_amount AS 'sticker', COALESCE(SUM(te.qty), 0) AS 'redeem_time'
-                FROM `events` e
-                LEFT JOIN transition_event te ON te.event_id = e.id
+                FROM `transition_event` te
+                LEFT JOIN `events` e ON te.event_id = e.id
                 LEFT JOIN transitions t ON t.id = te.transition_id
                 LEFT JOIN event_types et ON et.id = e.event_type_id
-                WHERE et.sort = 'prize' AND (t.`status` = 'S' OR t.`status` IS null)
+                WHERE et.sort = 'prize'
                 GROUP BY e.id
-                ORDER BY 'redeem_time'
+                ORDER BY redeem_time desc
                 LIMIT 10"
             )
         );
